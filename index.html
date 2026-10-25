@@ -1,171 +1,164 @@
-
-<!DOCTYPE html>
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Secret Birthday Surprise 🎀</title>
+<title>A Little Birthday Surprise 🎀</title>
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;min-height:100vh;padding:24px;
- display:flex;align-items:center;justify-content:center;
+ margin:0;min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center;
  font-family:"Trebuchet MS",sans-serif;color:#8e4265;
  background:linear-gradient(135deg,#ffe5ef,#ffd1e5,#fff0f6);
 }
-.card{
- width:min(100%,1000px);padding:30px;
- background:#ffffffbd;border:2px solid white;
- border-radius:32px;box-shadow:0 15px 50px #c76c9630;
-}
-.layout{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
-h1{font-size:clamp(28px,4vw,43px);margin:12px 0}
-p{line-height:1.6}
+.card{width:min(100%,850px);padding:clamp(18px,4vw,32px);background:#ffffffd9;border:2px solid white;border-radius:30px;box-shadow:0 15px 50px #c76c9630;text-align:center}
 .eyebrow{letter-spacing:3px;font-size:12px;color:#c15d8b}
-.dots{display:flex;gap:12px;margin:24px 0}
-.dot{
- width:18px;height:18px;border-radius:50%;
- background:#f3c1d7;border:2px solid #e8a1c1;
-}
+h1{font-size:clamp(28px,5vw,43px);margin:14px 0;color:#d34d8b}
+p{line-height:1.65}
+.dots{display:flex;gap:12px;justify-content:center;margin:24px 0}
+.dot{width:18px;height:18px;border-radius:50%;background:#f3c1d7;border:2px solid #e8a1c1}
 .dot.filled{background:#d95f98}
-.keypad{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:10px;margin-top:18px
-}
-.key{
- border:0;border-radius:17px;padding:15px 5px;
- background:#fff0f7;color:#9b426b;
- font-size:22px;font-weight:bold;cursor:pointer;
- box-shadow:0 4px 0 #e8b0ca;
-}
-.key:active{transform:translateY(3px);box-shadow:none}
-.action{background:#dc79a5;color:white}
-.cat{
- width:100%;height:240px;object-fit:cover;
- border-radius:24px;border:5px solid white;
- box-shadow:0 8px 25px #d98aaf35;
-}
-.cat-note{background:#fff0f6;padding:12px;border-radius:16px;margin-top:12px}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px auto 0;max-width:300px}
+.key,.next,.back{border:0;border-radius:16px;padding:14px 8px;background:#fff0f7;color:#9b426b;font-size:21px;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #e8b0ca}
+.key:active,.next:active,.back:active{transform:translateY(2px);box-shadow:none}
+.action,.next{background:#dc79a5;color:white}
 .message{color:#bd3977;min-height:24px;font-size:14px}
-#surprise{display:none;text-align:center;padding:25px 10px}
-#surprise h1{color:#d34d8b}
-.gift{font-size:70px}
-@media(max-width:650px){
- body{padding:12px}
- .card{padding:20px}
- .layout{grid-template-columns:1fr;gap:22px}
- .cat{height:200px}
- .right{order:-1}
- h1{font-size:30px}
- .key{padding:12px 5px}
-}
+#gallery,#final{display:none}
+.photo{width:100%;max-width:650px;height:min(58vh,480px);object-fit:contain;background:#fff0f6;border-radius:22px;border:5px solid white;box-shadow:0 8px 25px #d98aaf35}
+.caption{font-size:17px;margin:16px auto;max-width:600px}
+.controls{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:18px}
+.next,.back{font-size:16px;padding:13px 24px}
+.back{background:#fff0f7;color:#9b426b}
+.counter{font-size:13px;color:#bd6790;margin-top:12px}
+.gift{font-size:65px}
+@media(max-width:500px){body{padding:12px}.photo{height:48vh}.card{border-radius:24px}.key{padding:12px 5px}}
 </style>
 </head>
 <body>
 <main class="card">
-<section id="locked" class="layout">
-  <div class="left">
-    <div style="font-size:35px">🎀 💗</div>
+  <section id="locked">
+    <div style="font-size:38px">🎀 💗</div>
     <div class="eyebrow">A SECRET LITTLE GIFT</div>
     <h1>You've got a<br>surprise! ♡</h1>
     <p>Someone special made something just for you.</p>
     <p>Enter the secret code to unlock your gift! 🔐</p>
-
     <div class="dots" id="dots" aria-label="Password digits">
-      <span class="dot"></span><span class="dot"></span>
-      <span class="dot"></span><span class="dot"></span>
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
     </div>
-    <div class="message" id="message" aria-live="polite">
-      Hint: four little numbers ♡
-    </div>
-  </div>
-
-  <div class="right">
-    <img class="cat"
-      src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&amp;fit=crop&amp;w=700&amp;q=85"
-      alt="A cute cat">
-    <div class="cat-note" style="text-align:center">
-      🐾 <strong>meow meow!</strong> 🐾
-      <p style="margin:5px">Enter your secret code below ♡</p>
-    </div>
-
+    <div class="message" id="message" aria-live="polite">Hint: four little numbers ♡</div>
     <div class="keypad" aria-label="Number keypad">
-      <button class="key" data-num="1">1</button>
-      <button class="key" data-num="2">2</button>
-      <button class="key" data-num="3">3</button>
-      <button class="key" data-num="4">4</button>
-      <button class="key" data-num="5">5</button>
-      <button class="key" data-num="6">6</button>
-      <button class="key" data-num="7">7</button>
-      <button class="key" data-num="8">8</button>
-      <button class="key" data-num="9">9</button>
-      <button class="key" id="clear">⌫</button>
-      <button class="key" data-num="0">0</button>
-      <button class="key action" id="unlock">♡</button>
+      <button class="key" data-num="1">1</button><button class="key" data-num="2">2</button><button class="key" data-num="3">3</button>
+      <button class="key" data-num="4">4</button><button class="key" data-num="5">5</button><button class="key" data-num="6">6</button>
+      <button class="key" data-num="7">7</button><button class="key" data-num="8">8</button><button class="key" data-num="9">9</button>
+      <button class="key" id="clear">⌫</button><button class="key" data-num="0">0</button><button class="key action" id="unlock">♡</button>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="surprise">
-  <div class="gift">🎁🐱💗</div>
-  <h1>YOU UNLOCKED IT!</h1>
-  <h2>HAPPY BIRTHDAY!! 🎂</h2>
-  <p>A little reminder that you are loved, appreciated, and truly special.</p>
-  <p>May your day be full of smiles, sweet memories, and magical moments. 🌷</p>
-  <p>Made with lots of love ♡</p>
-</section>
+  <section id="gallery">
+    <div style="font-size:30px">💗 ✨ 💗</div>
+    <div class="eyebrow">A FEW LITTLE MEMORIES</div>
+    <h1 id="photoTitle">A memory just for you ♡</h1>
+    <img class="photo" id="photo" src="images/photo1.jpg" alt="Birthday memory">
+    <p class="caption" id="caption">A little memory to make you smile ♡</p>
+    <div class="controls">
+      <button class="back" id="prev">← Previous</button>
+      <button class="next" id="next">Next ♡</button>
+    </div>
+    <div class="counter" id="counter">Photo 1 of 3</div>
+  </section>
+
+  <section id="final">
+    <div class="gift">🎂🎁💗</div>
+    <div class="eyebrow">YOUR LITTLE SURPRISE</div>
+    <h1>Happy Birthday! ♡</h1>
+    <p>Wishing you a day full of happiness, laughter, and beautiful memories.</p>
+    <p>I hope these little moments made you smile. You deserve so many lovely things, today and always. 🌷</p>
+    <p>Made just for you, with lots of love ♡</p>
+    <button class="next" id="restart">See the memories again ↻</button>
+  </section>
 </main>
 
 <script>
-const correctCode = "1234";
+const correctCode = "9190";
 let entered = "";
-
 const dots = document.querySelectorAll(".dot");
 const message = document.getElementById("message");
 
 function updateDots(){
   dots.forEach((dot,i)=>dot.classList.toggle("filled",i<entered.length));
 }
-
-function addDigit(digit){
-  if(entered.length >= 4) return;
-  entered += digit;
-  updateDots();
-  message.textContent = "Almost there... 💗";
-  if(entered.length === 4) checkCode();
-}
-
 function checkCode(){
   if(entered === correctCode){
     document.getElementById("locked").style.display="none";
-    document.getElementById("surprise").style.display="block";
-  }else{
+    document.getElementById("gallery").style.display="block";
+    showPhoto(0);
+  } else {
     message.textContent="Oopsie! Wrong code. Try again ♡";
     entered="";
     updateDots();
   }
 }
-
+function addDigit(digit){
+  if(entered.length >= 4) return;
+  entered += digit;
+  updateDots();
+  message.textContent="Almost there... 💗";
+  if(entered.length === 4) checkCode();
+}
 document.querySelectorAll("[data-num]").forEach(button=>{
   button.addEventListener("click",()=>addDigit(button.dataset.num));
 });
-
 document.getElementById("clear").addEventListener("click",()=>{
-  entered=entered.slice(0,-1);
-  updateDots();
-  message.textContent="Try again, cutie ♡";
+  entered=entered.slice(0,-1);updateDots();message.textContent="Try again ♡";
+});
+document.getElementById("unlock").addEventListener("click",checkCode);
+document.addEventListener("keydown",event=>{
+  if(document.getElementById("locked").style.display !== "none"){
+    if(/^[0-9]$/.test(event.key)) addDigit(event.key);
+    if(event.key==="Backspace"){entered=entered.slice(0,-1);updateDots();}
+    if(event.key==="Enter") checkCode();
+  }
 });
 
-document.getElementById("unlock").addEventListener("click",checkCode);
+// EDIT THIS LIST: add one entry for each picture you upload to your images folder.
+const memories = [
+  { src: "images/photo1.jpg", caption: "A little memory to make you smile ♡" },
+  { src: "images/photo2.jpg", caption: "One more lovely moment ✨" },
+  { src: "images/photo3.jpg", caption: "And another memory just for you 💗" }
+];
+let currentPhoto = 0;
 
-document.addEventListener("keydown",event=>{
-  if(/^[0-9]$/.test(event.key)) addDigit(event.key);
-  if(event.key==="Backspace"){
-    entered=entered.slice(0,-1);
-    updateDots();
+function showPhoto(index){
+  currentPhoto = index;
+  const memory = memories[currentPhoto];
+  const photo = document.getElementById("photo");
+  photo.src = memory.src;
+  photo.alt = "Birthday memory " + (currentPhoto + 1);
+  document.getElementById("caption").textContent = memory.caption;
+  document.getElementById("counter").textContent = `Photo ${currentPhoto + 1} of ${memories.length}`;
+  document.getElementById("prev").style.visibility = currentPhoto === 0 ? "hidden" : "visible";
+  document.getElementById("next").textContent = currentPhoto === memories.length - 1 ? "Finish ♡" : "Next ♡";
+}
+document.getElementById("next").addEventListener("click",()=>{
+  if(currentPhoto < memories.length - 1){
+    showPhoto(currentPhoto + 1);
+  } else {
+    document.getElementById("gallery").style.display="none";
+    document.getElementById("final").style.display="block";
   }
-  if(event.key==="Enter") checkCode();
+});
+document.getElementById("prev").addEventListener("click",()=>{
+  if(currentPhoto > 0) showPhoto(currentPhoto - 1);
+});
+document.getElementById("restart").addEventListener("click",()=>{
+  document.getElementById("final").style.display="none";
+  document.getElementById("gallery").style.display="block";
+  showPhoto(0);
 });
 </script>
 </body>
 </html>
+'''
+path='/mnt/data/birthday_surprise.html'
+open(path,'w',encoding='utf-8').write(html)
+print(path, len(html))
